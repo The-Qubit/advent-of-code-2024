@@ -38,22 +38,26 @@ def part_two(input: str):
 
     for update in updates:
         for rule in orderings:
-            if (rule[0] in update and rule[1] in update and update.index(rule[0]) > update.index(rule[1]) and update not in wrong_updates):
+            if (rule[0] in update and rule[1] in update and update.index(rule[0]) > update.index(rule[1])):
                 wrong_updates.append(update)
+                break
 
     for update in wrong_updates:
-        for rule in orderings:
-            if (rule[0] in update and rule[1] in update):
-                while (update.index(rule[0]) > update.index(rule[1])):
-                    index = update.index(rule[1])
-                    temp = update[index + 1]
-                    update[index + 1] = update[index]
-                    update[index] = temp
+        resolved  = False
+        while not resolved:
+            resolved = True
+            for rule in orderings:
+                if rule[0] in update and rule[1] in update:
+                    index_a = update.index(rule[0])
+                    index_b = update.index(rule[1])
+                    if index_a > index_b:
+                        update[index_a], update[index_b] = update[index_b], update[index_a]
+                        resolved = False
 
     result = sum(int(update[int(len(update) / 2)])
                  for update in wrong_updates)
     print(f"Part 2: {result}")
-    # 5946 is to high
+    # between 5749 and 5946
 
 if __name__ == "__main__":
     main()
